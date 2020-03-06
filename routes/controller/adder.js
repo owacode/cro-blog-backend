@@ -436,7 +436,7 @@ function verifyUser(email) {
     text: "Verify your Email for OneWater Author",
     html: `
       <h4>Hello Welcome to OneWater<h4>
-      <p>Click on the link to Verify Your Account <a href="http://localhost:3000/activate/` + token + `">http://localhost:3000/activate/` + token + `
+      <p>Click on the link to Verify Your Account <a href="https://onewater.herokuapp.com/activate/` + token + `">https://onewater.herokuapp.com/activate/` + token + `
       </a>
       `, // html body
     onError: (e) => console.log(e),

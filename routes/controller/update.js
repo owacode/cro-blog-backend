@@ -270,7 +270,7 @@ function resetPasswordUserConfirmation(email) {
     text: "Reset Password",
     html: `
       <h4>Reset Password For Blog Author<h4>
-      <p>Click on the link to Reset Your Password <a href="http://localhost:4200/onewater/recover-password/` + token + `">http://localhost:4200/onewater/recover-password/` + token + `
+      <p>Click on the link to Reset Your Password <a href="https://onewater.herokuapp.com/onewater/recover-password/` + token + `">https://onewater.herokuapp.com/onewater/recover-password/` + token + `
       </a>`, // html body
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i)
