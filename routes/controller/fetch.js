@@ -1,12 +1,10 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedAuthor = require('../../model/unapproved_author');
-const ApprovedAuthor = require('../../model/approved_author');
+const NotApprovedCRO = require('../../model/unapproved_cro');
+const ApprovedCRO = require('../../model/approved_cro');
 const ApprovedBlog = require('../../model/approved_blog');
 const AllBlog = require('../../model/all_blog');
-const SavedBlog = require('../../model/savedblog');
-const HomeBlog = require('../../model/homeblog');
-const AllAuthor = require('../../model/all_author');
+const AllCRO = require('../../model/all_cro');
 
 const AuthorVideo = require('../../model/author_video');
 class FetchController {
@@ -44,16 +42,6 @@ class FetchController {
   getAllBlogs() {
     return new Promise((resolve, reject) => {
       AllBlog.find({})
-        .then(result => {
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
-  getHomeSingleBlogs(id) {
-    return new Promise((resolve, reject) => {
-      HomeBlog.find({ _id: id })
         .then(result => {
           resolve(result)
         })
@@ -115,33 +103,9 @@ class FetchController {
     })
   }
 
-  getSavedBlogsByAuthor(id) {
-    return new Promise((resolve, reject) => {
-      SavedBlog.find({author_id:id}).sort({ "date_added": -1 })
-        .then(result => {
-          return resolve(result);
-        })
-        .catch(err => {
-          return reject(err);
-        });
-    })
-  }
-
-  getSingleSavedBlog(id) {
-    return new Promise((resolve, reject) => {
-      SavedBlog.findOne({_id:id})
-        .then(result => {
-          return resolve(result);
-        })
-        .catch(err => {
-          return reject(err);
-        });
-    })
-  }
-
   getApprovedBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedCRO({ _id: id })
         .then(result => {
           let blogs_id = result[0].approved_blogs_added;
           return ApprovedBlog.find({ _id: { $in: blogs_id } })
@@ -155,7 +119,7 @@ class FetchController {
 
   getUnapprovedBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedCRO({ _id: id })
         .then(result => {
           let blogs_id = result[0].unapproved_blogs_added;
           return NotApprovedBlog.find({ _id: { $in: blogs_id } })
@@ -169,7 +133,7 @@ class FetchController {
 
   getAllBlogsByAuthor(id) {
     return new Promise((resolve, reject) => {
-      this.getSingleApprovedAuthor({ _id: id })
+      this.getSingleApprovedCRO({ _id: id })
         .then(result => {
           let blogs_id = result[0].all_blogs_added;
           console.log(blogs_id);
@@ -182,21 +146,10 @@ class FetchController {
     })
   }
 
-  // Blogs that are show on the carousel which has three blogs
-  getHomeBlogs() {
-    return new Promise((resolve, reject) => {
-      HomeBlog.find({})
-        .then(result => {
-          resolve(result)
-        })
-        .catch(err => reject(err));
-    })
-  }
-
   /* <!------------------------------------------------------**********BLOG END***********-------------------------------------------!> */
-  getNotApprovedAuthor() {
+  getNotApprovedCRO() {
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.find({})
+      NotApprovedCRO.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -205,9 +158,9 @@ class FetchController {
     })
   }
 
-  getSingleNotApprovedAuthor(id) {
+  getSingleNotApprovedCRO(id) {
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.find({ _id: id })
+      NotApprovedCRO.find({ _id: id })
         .then(result => {
           resolve(result)
         })
@@ -215,10 +168,10 @@ class FetchController {
     })
   }
 
-  getSingleApprovedAuthor(id) {
+  getSingleApprovedCRO(id) {
     console.log(id, 'dwfcwe')
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.find({ _id: id })
+      ApprovedCRO.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -227,9 +180,9 @@ class FetchController {
     })
   }
 
-  getApprovedAuthor() {
+  getApprovedCRO() {
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.find({})
+      ApprovedCRO.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -238,9 +191,9 @@ class FetchController {
     })
   }
 
-  getAllAuthor() {
+  getAllCRO() {
     return new Promise((resolve, reject) => {
-      AllAuthor.find({})
+      AllCRO.find({})
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -249,9 +202,9 @@ class FetchController {
     })
   }
 
-  getSingleAllAuthor(id) {
+  getSingleAllCRO(id) {
     return new Promise((resolve, reject) => {
-      AllAuthor.find({ _id: id })
+      AllCRO.find({ _id: id })
         .then(result => {
           // console.log(result);
           resolve(result)
@@ -259,9 +212,9 @@ class FetchController {
         .catch(err => reject(err));
     })
   }
-
 
   //<<--------------------------------------------------------------------Video Posted By Author Starts--------------------------------------------------------------------->>
+
   getVideo() {
     return new Promise((resolve, reject) => {
       AuthorVideo.find({})
@@ -292,7 +245,7 @@ class FetchController {
     })
   }
 
-    getMostLikedBlogs() {
+  getMostLikedBlogs() {
     return new Promise((resolve, reject) => {
       ApprovedBlog.find().sort({ "likecount": -1 }).limit(5)
         .then(result => {

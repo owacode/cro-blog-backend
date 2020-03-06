@@ -22,4 +22,4 @@ const author = mongoose.Schema({
   form_filled:{type:Boolean},
 }).plugin(validator);
 
-module.exports = mongoose.model('AllAuthor', author, 'AllAuthors');
+module.exports = mongoose.model('AllCRO', author, 'AllCROs');

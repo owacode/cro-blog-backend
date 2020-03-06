@@ -28,4 +28,4 @@ const author = mongoose.Schema({
   // liked_blog:[] Remove it
 })
 
-module.exports = mongoose.model('ApprovedAuthor', author, 'ApprovedAuthors')
+module.exports = mongoose.model('ApprovedCRO', author, 'ApprovedCROs')

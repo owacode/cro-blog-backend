@@ -37,7 +37,6 @@ routes.post('/post-video', (req, res) => {
     }));
 })
 
-
 // This is for adding single image from editor
 routes.post('/addimage', upload.single('image'), async (req, res) => {
   console.log('hittttttttttttt', req.file);
@@ -78,29 +77,6 @@ routes.post('/homeblog', upload.single('image'), async (req, res) => {
     }));
 })
 
-//Update  Route for Blog to Home The Home Page Blogs ( 3 Blogs )
-routes.patch('/homeblog', upload.single('image'), async (req, res) => {
-  console.log(req.body);
-  const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch((err) => {
-      new Promise(() => { throw new Error('exception!'); });
-      console.log(err);
-    })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
-  updateController.updateHomeBlog(req.body)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Update Blog for HomePage",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
 // Route for UnApproved BLogs
 routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
   console.log(req.body);
@@ -193,7 +169,7 @@ routes.post('/approve-blog', (req, res) => {
 // Route for Saved Blogs
 routes.post('/save-blog', upload.single('image'), async (req, res) => {
   console.log(req.body, 'catehitttt');
-    const result = await cloudinary.v2.uploader.upload(req.file.path)
+  const result = await cloudinary.v2.uploader.upload(req.file.path)
     .catch((err) => {
       new Promise(() => { throw new Error('exception!'); });
       console.log(err);
@@ -216,7 +192,7 @@ routes.post('/save-blog', upload.single('image'), async (req, res) => {
 // Route for Saved Blogs
 routes.patch('/updateimage-saved-blog', upload.single('image'), async (req, res) => {
   console.log(req.body, 'updated saved hit');
-    const result = await cloudinary.v2.uploader.upload(req.file.path)
+  const result = await cloudinary.v2.uploader.upload(req.file.path)
     .catch((err) => {
       new Promise(() => { throw new Error('exception!'); });
       console.log(err);
@@ -284,10 +260,9 @@ routes.post('/deleteunapproveblog', (req, res) => {
 
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
 
-
 // Route for UnApproved Author Profile
-routes.post('/unapproved-author', async (req, res) => {
-  adderController.addUnApprovedAuthor(req.body)
+routes.post('/unapproved-cro', async (req, res) => {
+  adderController.addUnApprovedCRO(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -302,7 +277,7 @@ routes.post('/unapproved-author', async (req, res) => {
 })
 
 // Route for UnApproved Author Profile
-routes.post('/update-authorprofile', upload.single('image'), async (req, res) => {
+routes.post('/update-croprofile', upload.single('image'), async (req, res) => {
   console.log(req.body);
   const result = await cloudinary.v2.uploader.upload(req.file.path)
     .catch((err) => {
@@ -311,7 +286,7 @@ routes.post('/update-authorprofile', upload.single('image'), async (req, res) =>
     })
   req.body.imageurl = result.url;
   console.log(res.body);
-  updateController.updateAuthorProfile(req.body)
+  updateController.updateCROProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -326,9 +301,9 @@ routes.post('/update-authorprofile', upload.single('image'), async (req, res) =>
 })
 
 // Route for UnApproved Author Profile
-routes.post('/update-approveprofile-with-image',upload.single('imageurl'), async (req, res) => {
+routes.post('/update-approveprofile-with-image', upload.single('imageurl'), async (req, res) => {
   console.log(req.body);
-    const result = await cloudinary.v2.uploader.upload(req.file.path)
+  const result = await cloudinary.v2.uploader.upload(req.file.path)
     .catch((err) => {
       new Promise(() => { throw new Error('exception!'); });
       console.log(err);
@@ -365,11 +340,11 @@ routes.post('/update-approveprofile', (req, res) => {
     }));
 })
 // Route for Approving Author Profile
-routes.post('/approve-author', (req, res) => {
+routes.post('/approve-cro', (req, res) => {
   const id = {
     mainid: req.body.mainid
   }
-  adderController.addApprovedAuthor(req.body)
+  adderController.addApprovedCRO(req.body)
     .then(result => {
       console.log(result._id, 'idddddddd');
       id.approveid = result._id;
@@ -388,9 +363,9 @@ routes.post('/approve-author', (req, res) => {
 })
 
 // Route for Rejecting the Author Profile
-routes.post('/reject-author', (req, res) => {
+routes.post('/reject-cro', (req, res) => {
   console.log(req.body, 'body');
-  deleteController.deleteUnapprovedAuthor(req.body.id)
+  deleteController.deleteUnApprovedCRO(req.body.id)
     .then(result => {
       updateController.rejectAuthorProfile(req.body)
       res.status(200).json({
@@ -406,7 +381,7 @@ routes.post('/reject-author', (req, res) => {
 
 // Route for Getting Details of Author Profile
 routes.get('/single-author/:id', (req, res) => {
-  fetchController.getSingleApprovedAuthor(req.params.id)
+  fetchController.getSingleApprovedCRO(req.params.id)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -420,9 +395,7 @@ routes.get('/single-author/:id', (req, res) => {
     }));
 })
 
-
 /*<-------------------------------------------------######Other Routes for Authentication######--------------------------------------------------->*/
-
 
 // Route for Login
 routes.post('/login', async (req, res) => {
@@ -456,33 +429,33 @@ routes.get('/activate/:token', (req, res) => {
     })
 })
 
-routes.post('/reset-password', (req, res)=> {
+routes.post('/reset-password', (req, res) => {
   console.log(req.body);
   updateController.recoverPassword(req.body.email)
-  .then(result => res.json({
-    status: 'success',
-    msg: 'Check you email',
-    result: result
-  }))
-  .catch(err=> res.json({
-    status: 'error',
-    msg: 'Email not Exist',
-    error: err
-  }))
+    .then(result => res.json({
+      status: 'success',
+      msg: 'Check you email',
+      result: result
+    }))
+    .catch(err => res.json({
+      status: 'error',
+      msg: 'Email not Exist',
+      error: err
+    }))
 })
 
-routes.post('/update-password',( req, res)=>{
+routes.post('/update-password', (req, res) => {
   console.log(req.body);
   updateController.updatePassword(req.body)
-  .then(result => res.json({
-    status: 'success',
-    msg: 'Password Update Successfully',
-    result: result
-  }))
-  .catch(err=> res.json({
-    status: 'error',
-    msg: 'Error in Updating Password',
-    error: err
-  }))
+    .then(result => res.json({
+      status: 'success',
+      msg: 'Password Update Successfully',
+      result: result
+    }))
+    .catch(err => res.json({
+      status: 'error',
+      msg: 'Error in Updating Password',
+      error: err
+    }))
 })
 module.exports = routes;

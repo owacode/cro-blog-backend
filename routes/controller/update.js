@@ -1,12 +1,11 @@
 //  MongoDB Models
 const NotApprovedBlog = require('../../model/unapproved_blog');
-const NotApprovedAuthor = require('../../model/unapproved_author');
-const ApprovedAuthor = require('../../model/approved_author');
+const NotApprovedCRO = require('../../model/unapproved_cro');
+const ApprovedCRO = require('../../model/approved_cro');
 const ApprovedBlog = require('../../model/approved_blog');
 const SavedBlog = require('../../model/savedblog');
 const AllBlog = require('../../model/all_blog');
-const AllAuthor = require('../../model/all_author');
-const HomeBlog = require('../../model/homeblog');
+const AllCRO = require('../../model/all_cro');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 const nodeoutlook = require('nodejs-nodemailer-outlook');
@@ -28,24 +27,6 @@ class UpdateController {
         { $inc: { 'likecount': 1 } })
         .then(response => { console.log('Like Incremented blog'); })
         .catch(err => console.log(err));
-    })
-  }
-
-  // Update Blog to Home The Home Page Blogs ( 3 Blogs )
-  updateHomeBlog(value) {
-    console.log('hitfefe', value)
-    return new Promise((resolve, reject) => {
-
-      HomeBlog.updateOne({ _id: value.id },
-        {
-          title: value.title,
-          category: value.category,
-          date_added: getTime(),
-          desc: value.desc,
-          image: value.imageurl
-        })
-        .then(response => { console.log('Updated blog'); resolve(response) })
-        .catch(err => reject(err));
     })
   }
 
@@ -87,27 +68,27 @@ class UpdateController {
     })
   }
 
-    // Update Saved Blog
-    updateSavedWithImageBlog(values) {
-      console.log(values, 'update savedblog')
-      return new Promise((resolve, reject) => {
-        SavedBlog.findByIdAndUpdate({ _id: values.id }, {
-          $set: {
-            title: values.title,
-            desc: values.desc,
-            image: values.imageurl
-          }
-        })
-          .then(result => {
-            console.log('Saved Blog Updated with Image');
-            return resolve(result);
-          })
-          .catch(err => {
-            console.log('error in Updated Saved Blog with Image', err);
-            return reject(err);
-          });
+  // Update Saved Blog
+  updateSavedWithImageBlog(values) {
+    console.log(values, 'update savedblog')
+    return new Promise((resolve, reject) => {
+      SavedBlog.findByIdAndUpdate({ _id: values.id }, {
+        $set: {
+          title: values.title,
+          desc: values.desc,
+          image: values.imageurl
+        }
       })
-    }
+        .then(result => {
+          console.log('Saved Blog Updated with Image');
+          return resolve(result);
+        })
+        .catch(err => {
+          console.log('error in Updated Saved Blog with Image', err);
+          return reject(err);
+        });
+    })
+  }
 
   // Approve a Blog
 
@@ -144,10 +125,10 @@ class UpdateController {
   }
 
   // Update Profile of Author
-  updateAuthorProfile(values) {
+  updateCROProfile(values) {
     console.log(values, 'author iddddddd')
     return new Promise((resolve, reject) => {
-      NotApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
+      NotApprovedCRO.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
           bio: values.bio,
@@ -159,8 +140,8 @@ class UpdateController {
         }
       })
         .then(result => {
-          console.log('Updated to NotApprovedAuthor');
-          this.updateAuthorProfileMain(values);
+          console.log('Updated to NotApprovedCRO');
+          this.updateCROProfileMain(values);
           resolve(result);
         })
         .catch(err => console.log('error in updating approve', err));
@@ -171,11 +152,11 @@ class UpdateController {
   updateAuthorApprovedProfile(values) {
     console.log(values, 'author iddddddd ###')
     return new Promise((resolve, reject) => {
-      ApprovedAuthor.findByIdAndUpdate({ _id: values.id }, {
+      ApprovedCRO.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           name: values.name,
           bio: values.bio,
-          image:values.imageurl,
+          image: values.imageurl,
           location: values.location,
           linkedIn_id: values.linkedIn,
           twitter_id: values.twitter,
@@ -183,8 +164,8 @@ class UpdateController {
         }
       })
         .then(result => {
-          console.log('Updated to ApprovedAuthor');
-          this.updateAuthorProfileMain(values);
+          console.log('Updated to ApprovedCRO');
+          this.updateCROProfileMain(values);
           return resolve(result);
         })
         .catch(err => {
@@ -195,9 +176,9 @@ class UpdateController {
   }
 
   // Update Profile of Author TO Main Collection
-  updateAuthorProfileMain(values) {
+  updateCROProfileMain(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, {
+    AllCRO.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
         name: values.name,
         bio: values.bio,
@@ -209,7 +190,7 @@ class UpdateController {
       }
     })
       .then(result => {
-        console.log('Updated to AllAuthor');
+        console.log('Updated to AllCRO');
 
       })
       .catch(err => console.log('error in updating approve', err));
@@ -219,7 +200,7 @@ class UpdateController {
 
   addunapproveidtoauthor(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
+    AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -227,7 +208,7 @@ class UpdateController {
   // Approve a Author
   approveAuthor(values) {
     console.log(values, 'author iddddddd')
-    AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
+    AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved', result))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -236,7 +217,7 @@ class UpdateController {
   rejectAuthorProfile(values) {
     console.log(values, 'mohit hit')
     return new Promise((resolve, reject) => {
-      AllAuthor.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
+      AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
@@ -245,9 +226,9 @@ class UpdateController {
   recoverPassword(email) {
     return new Promise((resolve, reject) => {
       console.log('got email', email)
-      token = jwt.sign({ email: email, platform: 'blog_author' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
+      token = jwt.sign({ email: email, platform: 'blog_cro' }, '@@#%&$ve%*(tok???//-!!==+++!!!e!!n)@reset@@@@pass');
       console.log(token);
-      ApprovedAuthor.find({ email: email })
+      ApprovedCRO.find({ email: email })
         .then(result => {
           console.log(result)
           if (result.length == 0) {
@@ -266,7 +247,7 @@ class UpdateController {
       saltHashPassword(values.password)
         .then(result => {
           console.log('hash !!!', result);
-          return AllAuthor.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
+          return AllCRO.findOneAndUpdate({ email: values.email }, { $set: { password: result.passwordHash, salt: result.salt } });
         })
         .then(result => {
           return resolve(result);
@@ -289,7 +270,7 @@ function resetPasswordUserConfirmation(email) {
     text: "Reset Password",
     html: `
       <h4>Reset Password For Blog Author<h4>
-      <p>Click on the link to Reset Your Password <a href="https://onewater.herokuapp.com/onewater/recover-password/` + token + `">https://onewater.herokuapp.com/onewater/recover-password/` + token + `
+      <p>Click on the link to Reset Your Password <a href="http://localhost:4200/onewater/recover-password/` + token + `">http://localhost:4200/onewater/recover-password/` + token + `
       </a>`, // html body
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i)
