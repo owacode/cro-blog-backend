@@ -53,30 +53,6 @@ routes.post('/addimage', upload.single('image'), async (req, res) => {
   })
 })
 
-// Route for Blog to Home The Home Page Blogs ( 3 Blogs )
-routes.post('/homeblog', upload.single('image'), async (req, res) => {
-  console.log(req.body);
-  const result = await cloudinary.v2.uploader.upload(req.file.path)
-    .catch((err) => {
-      new Promise(() => { throw new Error('exception!'); });
-      console.log(err);
-    })
-  const imagepath = result.url;
-  req.body.imageurl = imagepath;
-  adderController.addHomeBlog(req.body)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Blog is added for HomePage",
-        payload: result
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
 // Route for UnApproved BLogs
 routes.post('/unapproved-blog', upload.single('image'), async (req, res) => {
   console.log(req.body);
@@ -110,7 +86,7 @@ routes.post('/saved-unapproved-blog-with-image', upload.single('image'), async (
       console.log(err);
     })
   req.body.imageurl = result.url;
-  deleteController.deleteSavedBlog(req.body.savedid);
+  deleteController.deleteCROSavedBlog(req.body.savedid);
   adderController.addNewBlogToUnApproved(req.body)
     .then(result => {
       res.status(200).json({
@@ -129,7 +105,7 @@ routes.post('/saved-unapproved-blog-with-image', upload.single('image'), async (
 routes.post('/saved-unapproved-blog', (req, res) => {
   console.log(req.body);
   req.body.imageurl = req.body.image;
-  deleteController.deleteSavedBlog(req.body.savedid);
+  deleteController.deleteCROSavedBlog(req.body.savedid);
   adderController.addNewBlogToUnApproved(req.body)
     .then(result => {
       res.status(200).json({
@@ -175,7 +151,7 @@ routes.post('/save-blog', upload.single('image'), async (req, res) => {
       console.log(err);
     })
   req.body.imageurl = result.url;
-  adderController.addToSavedBlog(req.body)
+  adderController.addToCROSavedBlog(req.body)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -215,7 +191,7 @@ routes.patch('/updateimage-saved-blog', upload.single('image'), async (req, res)
 // Route for Saved Blogs
 routes.patch('/update-saved-blog', (req, res) => {
   console.log(req.body, 'updated saved hit');
-  updateController.updateSavedBlog(req.body)
+  updateController.updateCROSavedBlog(req.body)
     .then(result => {
       res.status(200).json({
         status: "success",
@@ -232,7 +208,7 @@ routes.patch('/update-saved-blog', (req, res) => {
 // Route for Deleteing Approved Blogs
 routes.post('/deleteapproveblog', (req, res) => {
   console.log(req.body);
-  deleteController.deleteApprovedBlog(req.body)
+  deleteController.deleteApprovedCROBlog(req.body)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Approved Blog Deleted Successfully",
@@ -247,7 +223,7 @@ routes.post('/deleteapproveblog', (req, res) => {
 // Route for Deleteing the UnApproved BLogs
 routes.post('/deleteunapproveblog', (req, res) => {
   console.log(req.body);
-  deleteController.deleteAuthorUnapprovedBlog(req.body)
+  deleteController.deleteAuthorUnApprovedCROBlog(req.body)
     .then((result) => res.status(200).json({
       status: "success",
       msg: "UnApproved Blog Deleted Successfully"
@@ -371,22 +347,6 @@ routes.post('/reject-cro', (req, res) => {
       res.status(200).json({
         status: "success",
         msg: "Author Profile Rejected"
-      })
-    })
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting Details of Author Profile
-routes.get('/single-author/:id', (req, res) => {
-  fetchController.getSingleApprovedCRO(req.params.id)
-    .then(result => {
-      res.status(200).json({
-        status: "success",
-        msg: "Author Profile",
-        result: result
       })
     })
     .catch(err => res.status(200).json({

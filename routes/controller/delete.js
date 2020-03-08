@@ -1,19 +1,19 @@
-const NotApprovedBlog= require('../../model/unapproved_blog');
+const NotApprovedCROBlog= require('../../model/unapproved_blog');
 const NotApprovedCRO= require('../../model/unapproved_cro');
 const ApprovedCRO= require('../../model/approved_cro');
-const ApprovedBlog= require('../../model/approved_blog');
+const ApprovedCROBlog= require('../../model/approved_blog');
 const updateController= require('./update');
-const SavedBlog = require('../../model/savedblog');
+const CROSavedBlog = require('../../model/savedblog');
 
 class DeleteOperationController{
   // This methord is for deleting the unpproved blog
   // when we approved that blog
-  deleteUnapprovedBlog(id){
-    console.log('del hit');
+  deleteUnApprovedCROBlog(id){
+    console.log('del hit',id);
     return new Promise((resolve, reject)=> {
     // updateController.deleteApproveBlog(values.mainid);
 
-    NotApprovedBlog.findByIdAndDelete({_id:id})
+    NotApprovedCROBlog.findByIdAndDelete({_id:id})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
       return resolve(result);
@@ -25,12 +25,12 @@ class DeleteOperationController{
     });
 }
 
-  deleteAuthorUnapprovedBlog(values){
+  deleteAuthorUnApprovedCROBlog(values){
     console.log('del hit');
     return new Promise((resolve, reject)=> {
     updateController.deleteApproveBlog(values.mainid);
 
-    NotApprovedBlog.findByIdAndDelete({_id:values.unapproveid})
+    NotApprovedCROBlog.findByIdAndDelete({_id:values.unapproveid})
     .then(result =>{
       console.log("Blog deleted from UnApproved",result);
       return resolve(result);
@@ -43,12 +43,12 @@ class DeleteOperationController{
 }
 
   // This methord is for deleting the approved blog by author
-  deleteApprovedBlog(values){
+  deleteApprovedCROBlog(values){
     return new Promise((resolve, reject)=> {
 
     updateController.deleteApproveBlog(values.mainid);
 
-    ApprovedBlog.findByIdAndDelete({_id:values.approveid})
+    ApprovedCROBlog.findByIdAndDelete({_id:values.approveid})
     .then(result =>{
       console.log("Blog deleted from Approved",result);
       return resolve(result);
@@ -61,9 +61,9 @@ class DeleteOperationController{
 }
 
 // Deleting Saved BLog
-  deleteSavedBlog(id){
+  deleteCROSavedBlog(id){
       console.log('hit delete,&&&&&&&&&&&&&&&&&!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!',id)
-      SavedBlog.findByIdAndDelete({_id:id})
+      CROSavedBlog.findByIdAndDelete({_id:id})
       .then(result =>{
         console.log("Saved Blog Deleted", result);
       })

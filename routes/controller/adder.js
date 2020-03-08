@@ -1,11 +1,12 @@
 //  MongoDB Models
-const NotApprovedBlog = require('../../model/unapproved_blog');
+const NotApprovedCROBlog = require('../../model/unapproved_blog');
 const NotApprovedCRO = require('../../model/unapproved_cro');
 const ApprovedCRO = require('../../model/approved_cro');
-const ApprovedBlog = require('../../model/approved_blog');
-const AllBlog = require('../../model/all_blog');
+const ApprovedCROBlog = require('../../model/approved_blog');
+const AllCROBlogs = require('../../model/all_blog');
 const AllCRO = require('../../model/all_cro');
-const AuthorVideo = require('../../model/author_video');
+const CROSavedBlog = require('../../model/savedblog');
+const croVideo = require('../../model/cro_video');
 
 // Controllers
 const deleteController = require('./delete');
@@ -25,7 +26,7 @@ class AdderOperationController {
   // Like a Blog
   likeTheBlog(values) {
     return new Promise((resolve, res) => {
-      ApprovedBlog.findByIdAndUpdate({ _id: values.blogid }, {
+      ApprovedCROBlog.findByIdAndUpdate({ _id: values.blogid }, {
         $addToSet: { likes: values.userid }
       })
         .then(result => {
@@ -36,7 +37,7 @@ class AdderOperationController {
     })
   }
 
-  // This methord is for adding the blogid to the author account (only for approved blogs)
+  // This methord is for adding the blogid to the cro account (only for approved blogs)
   addLikeBlogToUser(values) {
     ApprovedCRO.findByIdAndUpdate({ _id: values.blogid }, {
       $addToSet: { approved_blogs_added: values.blogid }
@@ -45,12 +46,12 @@ class AdderOperationController {
       .catch(err => console.log("Adding blog to account Error", err));
   }
 
-  addVideoByAuthor(value) {
+  addVideoBycro(value) {
     console.log('hitfefe', value)
     return new Promise((resolve, reject) => {
-      const video = new AuthorVideo({
-        author_email: value.email,
-        author_name: value.name,
+      const video = new croVideo({
+        cro_email: value.email,
+        cro_name: value.name,
         title: value.title,
         date_added: getTime(),
         desc: value.desc,
@@ -72,13 +73,13 @@ class AdderOperationController {
       this.addBlogToMain(value)
         .then((result) => {
           console.log(result, 'dwdw')
-          const blog = new NotApprovedBlog({
+          const blog = new NotApprovedCROBlog({
             title: value.title,
             category: value.category,
             date_added: getTime(),
-            author_id: value.authorid,
-            author_image: value.authorimage,
-            author_name: value.authorname,
+            cro_id: value.croid,
+            cro_image: value.croimage,
+            cro_name: value.croname,
             read_time: value.readtime,
             desc: value.desc,
             image: value.imageurl,
@@ -91,12 +92,12 @@ class AdderOperationController {
 
         .then((result) => {
           let id = {
-            authorid: result.author_id,
+            croid: result.cro_id,
             blogid: result._id,
             mainid: result.main_id
           }
-          console.log(id, 'mohit author$$$$$$$$$$$$')
-          this.addUnapprovedBlogToUser(id);
+          console.log(id, 'mohit cro$$$$$$$$$$$$')
+          this.addUnApprovedCROBlogToUser(id);
           id = {
             mainid: result.main_id,
             blogid: result._id,
@@ -116,19 +117,19 @@ class AdderOperationController {
     return new Promise((resolve, reject) => {
 
       // First Deleting the unapproved blog from the collection
-      deleteController.deleteUnapprovedBlog(value.unapproveid)
+      deleteController.deleteUnApprovedCROBlog(value.unapproveid)
         .then(result => {
-          // console.log("not approved blog", result);
-          const blog = new ApprovedBlog({
+          console.log("not approved blog", result);
+          const blog = new ApprovedCROBlog({
             title: result.title,
             category: value.category,
             sub_category: value.subcategory,
             read_time: result.read_time,
             date_added: result.date_added,
             date_approved: getTime(),
-            author_id: result.author_id,
-            author_image: result.author_image,
-            author_name: result.author_name,
+            cro_id: result.cro_id,
+            cro_image: result.cro_image,
+            cro_name: result.cro_name,
             main_id: result.main_id,
             desc: result.desc,
             likes: [],
@@ -141,11 +142,11 @@ class AdderOperationController {
         })
         .then((result) => {
           const id = {
-            authorid: result.author_id,
+            croid: result.cro_id,
             blogid: result._id
           }
-          // console.log(id,'author details0');
-          this.addApprovedBlogToUser(id);
+          console.log(id,'cro details0');
+          this.addApprovedCROBlogToUser(id);
           resolve(result)
         })
         .catch(err => reject(err));
@@ -156,12 +157,12 @@ class AdderOperationController {
   addBlogToMain(values) {
     console.log('hit all blogs', values);
     return new Promise((resolve, reject) => {
-      const blog = new AllBlog({
+      const blog = new AllCROBlogs({
         approved_id: 'null',
         unapproved_id: 'null',
-        author_id: values.authorid,
-        author_name: values.authorname,
-        author_image: values.authorimage,
+        cro_id: values.croid,
+        cro_name: values.croname,
+        cro_image: values.croimage,
         read_time: values.readtime,
         rejected: false,
         status: 'pending',
@@ -174,28 +175,28 @@ class AdderOperationController {
 
       blog.save()
         .then(result => {
-          console.log("Blog added to allblogs")
+          console.log("Blog added to AllCROBlogs")
           resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding blog to allblogs", err);
+          console.log("Error in adding blog to AllCROBlogs", err);
           reject(err);
         })
     })
   }
 
-  // This methord is for adding the blogid to the author account (only for approved blogs)
-  addApprovedBlogToUser(values) {
-    ApprovedCRO.findByIdAndUpdate({ _id: values.authorid }, {
+  // This methord is for adding the blogid to the cro account (only for approved blogs)
+  addApprovedCROBlogToUser(values) {
+    ApprovedCRO.findByIdAndUpdate({ _id: values.croid }, {
       $addToSet: { approved_blogs_added: values.blogid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
       .catch(err => console.log("Adding blog to account Error", err));
   }
 
-  // This methord is for adding the blogid to the author account (for unapproved and all blogs)
-  addUnapprovedBlogToUser(values) {
-    ApprovedCRO.findByIdAndUpdate({ _id: values.authorid }, {
+  // This methord is for adding the blogid to the cro account (for unapproved and all blogs)
+  addUnApprovedCROBlogToUser(values) {
+    ApprovedCRO.findByIdAndUpdate({ _id: values.croid }, {
       $addToSet: { unapproved_blogs_added: values.blogid, all_blogs_added: values.mainid }
     })
       .then(result => console.log("Adding blog to account Successfull", result))
@@ -206,22 +207,22 @@ class AdderOperationController {
     const like = {
       blogid: values.blogid
     }
-    ApprovedCRO.findByIdAndUpdate({ _id: values.authorid }, { $addToSet: { liked_blog: like } })
+    ApprovedCRO.findByIdAndUpdate({ _id: values.croid }, { $addToSet: { liked_blog: like } })
       .then(result => console.log("Blog liked added to user"))
       .catch(err => console.log("Error in Adding Blog to liked"))
   }
 
-  // This is for adding the new author
-  // initially author will we unapproved
+  // This is for adding the new cro
+  // initially cro will we unapproved
   addUnApprovedCRO(values) {
     console.log(values);
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
     let salt;
     let hashpass;
     return new Promise((resolve, reject) => {
-      this.addAuthorToMain(values)
+      this.addcroToMain(values)
         .then(result => {
-          const author = new NotApprovedCRO({
+          const cro = new NotApprovedCRO({
             name: values.name,
             bio: 'null',
             image: 'null',
@@ -236,7 +237,7 @@ class AdderOperationController {
             salt: result.salt,
             password: result.password,
           });
-          return author.save();
+          return cro.save();
         })
 
         .then(result => {
@@ -245,14 +246,14 @@ class AdderOperationController {
             unapproved_id: result._id,
             mainid: result.main_id
           }
-          updateController.addunapproveidtoauthor(data);
+          updateController.addunapproveidtocro(data);
           resolve(result);
         })
         .catch(err => reject(err));
     })
   }
 
-  // This is for approving the Author
+  // This is for approving the cro
   // to post the blog by approving his profile
   addApprovedCRO(values) {
     console.log("approve hit")
@@ -260,9 +261,9 @@ class AdderOperationController {
       // First Deleting the Auhor Profile from UnApproved Collection
       deleteController.deleteUnApprovedCRO(values.id)
         .then(result => {
-          approveAuthorMail(result.email);
-          console.log(result, 'hit app author')
-          const author = new ApprovedCRO({
+          approvecroMail(result.email);
+          console.log(result, 'hit app cro')
+          const cro = new ApprovedCRO({
             name: result.name,
             bio: result.bio,
             date_added: result.date_added,
@@ -284,15 +285,15 @@ class AdderOperationController {
             approved_blogs_added: []
             // liked_blog:[]
           });
-          return author.save();
+          return cro.save();
         })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
   }
 
-  //This is for adding the Author to collection where all the Authors are stored
-  addAuthorToMain(values) {
+  //This is for adding the cro to collection where all the cros are stored
+  addcroToMain(values) {
     token = jwt.sign({ email: values.email }, '@@@#%&$ve%*(tok???//---==+++!!!e!!n)@rify@@@@');
     let salt;
     let hashpass;
@@ -321,16 +322,40 @@ class AdderOperationController {
           return blog.save();
         })
         .then(result => {
-          console.log("Author added to AllCRO")
+          console.log("cro added to AllCRO")
           resolve(result);
         })
         .catch(err => {
-          console.log("Error in adding Author to AllCRO", err);
+          console.log("Error in adding cro to AllCRO", err);
           reject(err);
         })
     })
   }
 
+  //This is for adding the blog to collection where all the blogs are stored
+  addToCROSavedBlog(values) {
+    console.log('hit to saved blogs', values);
+    return new Promise((resolve, reject) => {
+      const blog = new CROSavedBlog({
+        cro_id: values.croid,
+        title: values.title,
+        date_added: getTime(),
+        desc: values.desc,
+        image: values.imageurl,
+        blog_no: 0
+      })
+
+      blog.save()
+        .then(result => {
+          console.log("Blog added to saved blog");
+          resolve(result);
+        })
+        .catch(err => {
+          console.log("Error in adding blog to saved blog", err);
+          reject(err);
+        })
+    })
+  }
   // Login Function
   login(userdata) {
     return new Promise((resolve, reject) => {
@@ -433,7 +458,7 @@ function verifyUser(email) {
     from: ' "OneWater " <OWACODE@onewateracademy.org> ',
     to: email,
     subject: "Verify Account✔", // Subject line
-    text: "Verify your Email for OneWater Author",
+    text: "Verify your Email for OneWater cro",
     html: `
       <h4>Hello Welcome to OneWater<h4>
       <p>Click on the link to Verify Your Account <a href="https://onewater.herokuapp.com/activate/` + token + `">https://onewater.herokuapp.com/activate/` + token + `
@@ -445,14 +470,14 @@ function verifyUser(email) {
 }
 
 function AdminMailForBlog(values) {
-  console.log(values, 'author maillllllllllllllllll$$$')
+  console.log(values, 'cro maillllllllllllllllll$$$')
   let sendingMail = {
     from: ' "OneWater " <onewateracademy1@gmail.com> ',
     to: 'Atharva.mungee@onewateracademy.org',
     subject: "New Blog Added", // Subject line
-    text: "A new Author Profile has been added Please Check AdminPanel.",
+    text: "A new cro Profile has been added Please Check AdminPanel.",
     html: `
-      <h4>Blog Added By ${values.authorname}<h4>
+      <h4>Blog Added By ${values.croname}<h4>
       <h4>Title: ${values.title}<h4>
       <p> A new Blog has been added Please Check AdminPanel. </p>` // html body
   }
@@ -469,17 +494,17 @@ function AdminMailForBlog(values) {
   })
 }
 
-function approveAuthorMail(email) {
+function approvecroMail(email) {
   console.log('$$$$$$$$$', email);
   nodeoutlook.sendEmail({
     auth: nodemailerAuthCredential,
     from: ' "OneWater " <OWACODE@onewateracademy.org> ',
     to: email,
     subject: "Profile Approved✔", // Subject line
-    text: "Your Profile has been approved for Author",
+    text: "Your Profile has been approved for cro",
     html: `
       <h4> Congratulations Hello Welcome to OneWater Learning Academy<h4>
-      <p>Your Profile has been approved for Author. You can now Post Blogs. Login and Add Your Blog.
+      <p>Your Profile has been approved for cro. You can now Post Blogs. Login and Add Your Blog.
       `, // html body
     onError: (e) => console.log(e),
     onSuccess: (i) => console.log(i)

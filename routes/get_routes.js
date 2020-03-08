@@ -51,37 +51,9 @@ routes.get('/video/:id', (req, res) => {
     }));
 })
 
-// Route for Home Blogs
-routes.get('/homeblog', (req, res) => {
-  fetchController.getHomeBlogs(req.body)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Home Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Home Blogs
-routes.get('/homeblog/:id', (req, res) => {
-  fetchController.getHomeSingleBlogs(req.params.id)
-    .then(result => res.status(200).json({
-      status: "success",
-      msg: "Home Blog Fetch Successfully",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
 // Route for Getting All Approved Blogs
 routes.get('/approveblogs', (req, res) => {
-  fetchController.getApprovedBlogs(req.body)
+  fetchController.getApprovedCROBlogs(req.body)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -95,7 +67,7 @@ routes.get('/approveblogs', (req, res) => {
 
 // Route for Getting All Approved Blogs
 routes.get('/category/:cat', (req, res) => {
-  fetchController.getCategoryApprovedBlogs(req.params.cat)
+  fetchController.getCategoryApprovedCROBlogs(req.params.cat)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -109,7 +81,7 @@ routes.get('/category/:cat', (req, res) => {
 
 // Route for Getting All Not Approved Blogs
 routes.get('/notblogs', (req, res) => {
-  fetchController.getNotApprovedBlogs()
+  fetchController.getNotApprovedCROBlogs()
     .then(result => res.status(200).json({
       status: "success",
       msg: "NotApproved Blog Fetch Successfully",
@@ -121,9 +93,25 @@ routes.get('/notblogs', (req, res) => {
     }));
 })
 
+routes.get('/notapprovedblogsbycro/:id', (req, res) => {
+  console.log(req.params, 'not app by mayor')
+  fetchController.getUnApprovedBlogsByCRO(req.params.id)
+    .then(result => {
+      res.json({
+        status: "success",
+        msg: "Blogs by Author Fetch Successfully",
+        result: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Getting All Blogs
 routes.get('/allblogs', (req, res) => {
-  fetchController.getAllBlogs(req.body)
+  fetchController.getAllCROBlogs(req.body)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -135,9 +123,9 @@ routes.get('/allblogs', (req, res) => {
     }));
 })
 
-// Route for Getting a AllBlogs
+// Route for Getting a AllCROBlogs
 routes.get('/allblogs/:id', (req, res) => {
-  fetchController.getSingleAllBlogs(req.params.id)
+  fetchController.getSingleAllCROBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Blog Fetch Successfully",
@@ -150,9 +138,9 @@ routes.get('/allblogs/:id', (req, res) => {
 })
 
 // Route for Getting a saved blogs by author
-routes.get('/savedblogs/:id', (req, res) => {
+routes.get('/crosavedblogs/:id', (req, res) => {
   console.log(req.params.id)
-  fetchController.getSavedBlogsByAuthor(req.params.id)
+  fetchController.getCROSavedBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Saved Blog Fetch Successfully",
@@ -165,9 +153,9 @@ routes.get('/savedblogs/:id', (req, res) => {
 })
 
 // Route for Getting a saved blogs by author
-routes.get('/singlesavedblog/:id', (req, res) => {
+routes.get('/singlecrosavedblog/:id', (req, res) => {
   console.log(req.params.id)
-  fetchController.getSingleSavedBlog(req.params.id)
+  fetchController.getSingleCROSavedBlog(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single Saved Blog Fetch Successfully",
@@ -179,9 +167,9 @@ routes.get('/singlesavedblog/:id', (req, res) => {
     }));
 })
 
-// Route for Getting Single NOtApprovedBlog Authors
+// Route for Getting Single NotApprovedCROBlog Authors
 routes.get('/singlenotappblog/:id', (req, res) => {
-  fetchController.getSingleNotApprovedBlog(req.params.id)
+  fetchController.getSingleNotApprovedCROBlog(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single NotApproved Author Fetch Successfully",
@@ -193,10 +181,10 @@ routes.get('/singlenotappblog/:id', (req, res) => {
     }));
 })
 
-// Route for Getting Single ApprovedBlog Authors
+// Route for Getting Single ApprovedCROBlog Authors
 routes.get('/singleappblog/:id', (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
-  fetchController.getSingleApprovedBlogs(req.params.id)
+  fetchController.getSingleApprovedCROBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
       msg: "Single Approved Blog Fetch Successfully",
@@ -208,9 +196,9 @@ routes.get('/singleappblog/:id', (req, res) => {
     }));
 })
 
-routes.get('/authorapprovedblogs/:id', (req, res) => {
+routes.get('/approvedcroblogs/:id', (req, res) => {
   console.log(req.params, 'kksnkk')
-  fetchController.getApprovedBlogsByAuthor(req.params.id)
+  fetchController.getApprovedBlogsByCRO(req.params.id)
     .then(result => {
       res.json({
         status: "success",
@@ -224,9 +212,9 @@ routes.get('/authorapprovedblogs/:id', (req, res) => {
     }));
 })
 
-routes.get('/authorunapprovedblogs/:id', (req, res) => {
+routes.get('/authorunApprovedCROBlogs/:id', (req, res) => {
   console.log(req.params, 'kksnkk')
-  fetchController.getUnapprovedBlogsByAuthor(req.params.id)
+  fetchController.getUnApprovedCROBlogsByAuthor(req.params.id)
     .then(result => {
       res.json({
         status: "success",
@@ -240,9 +228,9 @@ routes.get('/authorunapprovedblogs/:id', (req, res) => {
     }));
 })
 
-routes.get('/authorallblogs/:id', (req, res) => {
+routes.get('/croallblogs/:id', (req, res) => {
   console.log(req.params, 'kksnkk')
-  fetchController.getAllBlogsByAuthor(req.params.id)
+  fetchController.getAllCROBlogsByCRO(req.params.id)
     .then(result => {
       res.json({
         status: "success",
@@ -256,6 +244,23 @@ routes.get('/authorallblogs/:id', (req, res) => {
     }));
 })
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
+// Route for Getting Details of Author Profile
+routes.get('/single-cro/:id', (req, res) => {
+  console.log(req.param.id,'iddd')
+  fetchController.getSingleApprovedCRO(req.params.id)
+    .then(result => {
+      res.status(200).json({
+        status: "success",
+        msg: "Author Profile",
+        result: result
+      })
+    })
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Getting All Not Approved Authors
 routes.get('/notauthor', (req, res) => {
   fetchController.getNotApprovedCRO()

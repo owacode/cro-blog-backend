@@ -7,7 +7,6 @@ const blog = mongoose.Schema({
   author_image:{type:String},
   author_name:{type:String},
   title:{type: String,required:true},
-  category:[],
   read_time:{type:String},
   date_added:{type: Date},
   desc:{type:String},
@@ -16,4 +15,4 @@ const blog = mongoose.Schema({
   status:{type:String, default:'pending'}
 })
 
-module.exports = mongoose.model('AllBlog', blog, 'AllBlogs');
+module.exports = mongoose.model('AllCROBlogs', blog, 'AllCROBlogs');

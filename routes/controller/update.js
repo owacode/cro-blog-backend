@@ -1,10 +1,10 @@
 //  MongoDB Models
-const NotApprovedBlog = require('../../model/unapproved_blog');
+const NotApprovedCROBlog = require('../../model/unapproved_blog');
 const NotApprovedCRO = require('../../model/unapproved_cro');
 const ApprovedCRO = require('../../model/approved_cro');
-const ApprovedBlog = require('../../model/approved_blog');
-const SavedBlog = require('../../model/savedblog');
-const AllBlog = require('../../model/all_blog');
+const ApprovedCROBlog = require('../../model/approved_blog');
+const CROSavedBlog = require('../../model/savedblog');
+const AllCROBlogs = require('../../model/all_blog');
 const AllCRO = require('../../model/all_cro');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
@@ -22,7 +22,7 @@ class UpdateController {
     console.log('hitfefe', id)
     return new Promise((resolve, reject) => {
 
-      ApprovedBlog.update(
+      ApprovedCROBlog.update(
         { _id: id },
         { $inc: { 'likecount': 1 } })
         .then(response => { console.log('Like Incremented blog'); })
@@ -34,7 +34,7 @@ class UpdateController {
   updateBlog(value) {
     return new Promise((resolve, reject) => {
 
-      ApprovedBlog.updateOne({ _id: value.id },
+      ApprovedCROBlog.updateOne({ _id: value.id },
         {
           title: value.title,
           category: value.category,
@@ -48,10 +48,10 @@ class UpdateController {
   }
 
   // Update Saved Blog
-  updateSavedBlog(values) {
-    console.log(values, 'update savedblog')
+  updateCROSavedBlog(values) {
+    console.log(values, 'update CROSavedBlog')
     return new Promise((resolve, reject) => {
-      SavedBlog.findByIdAndUpdate({ _id: values.id }, {
+      CROSavedBlog.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           title: values.title,
           desc: values.desc
@@ -70,9 +70,9 @@ class UpdateController {
 
   // Update Saved Blog
   updateSavedWithImageBlog(values) {
-    console.log(values, 'update savedblog')
+    console.log(values, 'update CROSavedBlog')
     return new Promise((resolve, reject) => {
-      SavedBlog.findByIdAndUpdate({ _id: values.id }, {
+      CROSavedBlog.findByIdAndUpdate({ _id: values.id }, {
         $set: {
           title: values.title,
           desc: values.desc,
@@ -94,7 +94,7 @@ class UpdateController {
 
   approveBlog(values) {
     console.log(values, 'blog iddddddd')
-    AllBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
+    AllCROBlogs.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -102,7 +102,7 @@ class UpdateController {
   // Delete a Approve Blog
   deleteApproveBlog(id) {
     console.log('main del hit');
-    AllBlog.findByIdAndUpdate({ _id: id }, { $set: { status: 'deleted' } })
+    AllCROBlogs.findByIdAndUpdate({ _id: id }, { $set: { status: 'deleted' } })
       .then(result => console.log('Updated to deleted'))
       .catch(err => console.log('error in updating approve', err));
   }
@@ -110,7 +110,7 @@ class UpdateController {
 
   rejectBlog(values) {
     return new Promise((resolve, reject) => {
-      AllBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
+      AllCROBlogs.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
         .then(result => resolve(result))
         .catch(err => reject(err));
     })
@@ -118,15 +118,15 @@ class UpdateController {
 
   //Add UnApproved id of Blog to Main Blog
   addUnapproveIdToMainBlog(values) {
-    console.log(values, 'author iddddddd')
-    AllBlog.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.blogid } })
+    console.log(values, 'cro iddddddd')
+    AllCROBlogs.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.blogid } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
 
-  // Update Profile of Author
+  // Update Profile of cro
   updateCROProfile(values) {
-    console.log(values, 'author iddddddd')
+    console.log(values, 'cro iddddddd')
     return new Promise((resolve, reject) => {
       NotApprovedCRO.findByIdAndUpdate({ _id: values.id }, {
         $set: {
@@ -148,9 +148,9 @@ class UpdateController {
     })
   }
 
-  // Update Profile of Author
-  updateAuthorApprovedProfile(values) {
-    console.log(values, 'author iddddddd ###')
+  // Update Profile of cro
+  updatecroApprovedProfile(values) {
+    console.log(values, 'cro iddddddd ###')
     return new Promise((resolve, reject) => {
       ApprovedCRO.findByIdAndUpdate({ _id: values.id }, {
         $set: {
@@ -175,9 +175,9 @@ class UpdateController {
     })
   }
 
-  // Update Profile of Author TO Main Collection
+  // Update Profile of cro TO Main Collection
   updateCROProfileMain(values) {
-    console.log(values, 'author iddddddd')
+    console.log(values, 'cro iddddddd')
     AllCRO.findByIdAndUpdate({ _id: values.mainid }, {
       $set: {
         name: values.name,
@@ -196,25 +196,25 @@ class UpdateController {
       .catch(err => console.log('error in updating approve', err));
   }
 
-  //Add Unapprove id to Author
+  //Add Unapprove id to cro
 
-  addunapproveidtoauthor(values) {
-    console.log(values, 'author iddddddd')
+  addunapproveidtocro(values) {
+    console.log(values, 'cro iddddddd')
     AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated to approved'))
       .catch(err => console.log('error in updating approve', err));
   }
 
-  // Approve a Author
-  approveAuthor(values) {
-    console.log(values, 'author iddddddd')
+  // Approve a cro
+  approvecro(values) {
+    console.log(values, 'cro iddddddd')
     AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved', result))
       .catch(err => console.log('error in updating approve', err));
   }
 
-  // Rejecting a Author Profile
-  rejectAuthorProfile(values) {
+  // Rejecting a cro Profile
+  rejectcroProfile(values) {
     console.log(values, 'mohit hit')
     return new Promise((resolve, reject) => {
       AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })
@@ -269,7 +269,7 @@ function resetPasswordUserConfirmation(email) {
     subject: "Reset Password✔", // Subject line
     text: "Reset Password",
     html: `
-      <h4>Reset Password For Blog Author<h4>
+      <h4>Reset Password For Blog cro<h4>
       <p>Click on the link to Reset Your Password <a href="https://onewater.herokuapp.com/onewater/recover-password/` + token + `">https://onewater.herokuapp.com/onewater/recover-password/` + token + `
       </a>`, // html body
     onError: (e) => console.log(e),

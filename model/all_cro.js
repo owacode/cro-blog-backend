@@ -17,7 +17,6 @@ const author = mongoose.Schema({
   password:{type: String},
   salt:{type: String},
   token:{type: String},
-  interest_category:[],
   verified:{type:Boolean},
   form_filled:{type:Boolean},
 }).plugin(validator);

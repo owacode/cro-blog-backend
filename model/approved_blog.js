@@ -12,9 +12,9 @@ const blog = mongoose.Schema({
   read_time:{type: String},
   date_added:{type: String},
   date_approved:{type: Date},
-  author_id:{type:String, require:true},
-  author_image:{type:String},
-  author_name:{type:String},
+  cro_id:{type:String, require:true},
+  cro_image:{type:String},
+  cro_name:{type:String},
   main_id:{type:String, require:true},
   desc:{type: String,required:true},
   tags:[],
@@ -26,4 +26,4 @@ const blog = mongoose.Schema({
   field: 'blog_no'
 });
 
-module.exports = mongoose.model('ApprovedBlog', blog, 'ApprovedBlogs')
+module.exports = mongoose.model('ApprovedCROBlog', blog, 'ApprovedCROBlogs')

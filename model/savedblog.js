@@ -8,7 +8,7 @@ const auoInCrease = require('mongodb-autoincrement');
 const blog = mongoose.Schema({
   title:{type: String,required:true},
   date_added:{type: String},
-  author_id:{type:String, require:true},
+  cro_id:{type:String, require:true},
   desc:{type: String,required:true},
   image:{type: String,required:true},
   blog_no:{type:Number}
@@ -16,4 +16,4 @@ const blog = mongoose.Schema({
   field: 'blog_no'
 });
 
-module.exports = mongoose.model('SavedBlog', blog, 'SavedBlogs')
+module.exports = mongoose.model('CROSavedBlog', blog, 'CROSavedBlogs')

@@ -13,7 +13,6 @@ const author = mongoose.Schema({
   password:{type: String},
   salt:{type: String},
   token:{type: String},
-  interest_category:[],
   main_id:{type:String},
   verified:{type:Boolean},
   form_filled:{type:Boolean},
