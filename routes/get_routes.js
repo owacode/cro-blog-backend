@@ -181,7 +181,7 @@ routes.get('/singlenotappblog/:id', (req, res) => {
     }));
 })
 
-// Route for Getting Single ApprovedCROBlog Authors
+// Route for Getting Single ApprovedCROBlog
 routes.get('/singleappblog/:id', (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
   fetchController.getSingleApprovedCROBlogs(req.params.id)
@@ -290,7 +290,7 @@ routes.get('/notauthor/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/ApprovedCRO', (req, res) => {
+routes.get('/approvedcro', (req, res) => {
   fetchController.getApprovedCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -304,7 +304,7 @@ routes.get('/ApprovedCRO', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/ApprovedCRO/:id', (req, res) => {
+routes.get('/approvedcro/:id', (req, res) => {
   fetchController.getSingleApprovedCRO(req.params.id)
     .then(result => res.status(200).json({
       status: "success",

@@ -83,7 +83,7 @@ class FetchController {
 
   getSingleApprovedCROBlogs(id) {
     return new Promise((resolve, reject) => {
-      ApprovedCROBlog.find({ _id: id })
+      ApprovedCROBlog.findOne({ _id: id })
         .then(result => {
           resolve(result)
         })
