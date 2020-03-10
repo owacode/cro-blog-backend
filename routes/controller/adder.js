@@ -246,7 +246,7 @@ class AdderOperationController {
             unapproved_id: result._id,
             mainid: result.main_id
           }
-          updateController.addunapproveidtocro(data);
+          updateController.addUnapproveIdToCRO(data);
           resolve(result);
         })
         .catch(err => reject(err));
@@ -275,15 +275,12 @@ class AdderOperationController {
             twitter_id: result.twitter_id,
             blogs_added: [],
             main_id: result.main_id,
-            verified: result.verified,
             token: token,
-            form_filled: result.form_filled,
             salt: result.salt,
             password: result.password,
             all_blogs_added: [],
             unapproved_blogs_added: [],
             approved_blogs_added: []
-            // liked_blog:[]
           });
           return cro.save();
         })
@@ -461,7 +458,7 @@ function verifyUser(email) {
     text: "Verify your Email for OneWater cro",
     html: `
       <h4>Hello Welcome to OneWater<h4>
-      <p>Click on the link to Verify Your Account <a href="https://onewater.herokuapp.com/activate/` + token + `">https://onewater.herokuapp.com/activate/` + token + `
+      <p>Click on the link to Verify Your Account <a href="https://onewater-cro.herokuapp.com/activate/` + token + `">https://onewater-cro.herokuapp.com/activate/` + token + `
       </a>
       `, // html body
     onError: (e) => console.log(e),

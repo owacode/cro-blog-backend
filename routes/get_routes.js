@@ -262,7 +262,7 @@ routes.get('/single-cro/:id', (req, res) => {
 })
 
 // Route for Getting All Not Approved Authors
-routes.get('/notauthor', (req, res) => {
+routes.get('/pending-cro', (req, res) => {
   fetchController.getNotApprovedCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -276,7 +276,7 @@ routes.get('/notauthor', (req, res) => {
 })
 
 // Route for Getting Single Not Approved Author
-routes.get('/notauthor/:id', (req, res) => {
+routes.get('/pending-cro/:id', (req, res) => {
   fetchController.getSingleNotApprovedCRO(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -318,7 +318,7 @@ routes.get('/approvedcro/:id', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/AllCRO', (req, res) => {
+routes.get('/all-cro', (req, res) => {
   fetchController.getAllCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -332,7 +332,7 @@ routes.get('/AllCRO', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/AllCRO/:id', (req, res) => {
+routes.get('/all-cro/:id', (req, res) => {
   fetchController.getSingleAllCRO(req.params.id)
     .then(result => res.status(200).json({
       status: "success",

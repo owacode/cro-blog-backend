@@ -13,8 +13,6 @@ const author = mongoose.Schema({
   salt:{type: String},
   token:{type: String},
   main_id:{type:String},
-  verified:{type:Boolean},
-  form_filled:{type:Boolean},
   // Social Accounts
   linkedIn_id:{type: String},
   email:{type: String},
@@ -24,7 +22,6 @@ const author = mongoose.Schema({
   approved_blogs_added:[],
   unapproved_blogs_added:[],
   all_blogs_added:[],
-  // liked_blog:[] Remove it
 })
 
 module.exports = mongoose.model('ApprovedCRO', author, 'ApprovedCROs')

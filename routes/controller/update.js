@@ -198,7 +198,7 @@ class UpdateController {
 
   //Add Unapprove id to cro
 
-  addunapproveidtocro(values) {
+  addUnapproveIdToCRO(values) {
     console.log(values, 'cro iddddddd')
     AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { unapproved_id: values.unapproved_id } })
       .then(result => console.log('Updated to approved'))
@@ -206,7 +206,7 @@ class UpdateController {
   }
 
   // Approve a cro
-  approvecro(values) {
+  approveCRO(values) {
     console.log(values, 'cro iddddddd')
     AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { approved_id: values.approveid, status: 'approved' } })
       .then(result => console.log('Updated to approved', result))
@@ -214,7 +214,7 @@ class UpdateController {
   }
 
   // Rejecting a cro Profile
-  rejectcroProfile(values) {
+  rejectCROProfile(values) {
     console.log(values, 'mohit hit')
     return new Promise((resolve, reject) => {
       AllCRO.findByIdAndUpdate({ _id: values.mainid }, { $set: { rejected: true, status: 'rejected' } })

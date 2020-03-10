@@ -325,10 +325,10 @@ routes.post('/approve-cro', (req, res) => {
       console.log(result._id, 'idddddddd');
       id.approveid = result._id;
       console.log(id, 'dfdsf');
-      updateController.approveAuthor(id);
+      updateController.approveCRO(id);
       res.status(200).json({
         status: "success",
-        msg: "Author Profile is Approved",
+        msg: "CRO Profile is Approved",
         result: result
       })
     })
@@ -343,10 +343,10 @@ routes.post('/reject-cro', (req, res) => {
   console.log(req.body, 'body');
   deleteController.deleteUnApprovedCRO(req.body.id)
     .then(result => {
-      updateController.rejectAuthorProfile(req.body)
+      updateController.rejectCROProfile(req.body)
       res.status(200).json({
         status: "success",
-        msg: "Author Profile Rejected"
+        msg: "CRO Profile Rejected"
       })
     })
     .catch(err => res.status(200).json({
