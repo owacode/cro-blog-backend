@@ -1,58 +1,15 @@
 const express = require('express');
 const routes = express.Router();
+let apicache = require( 'apicache');
+let cache = apicache.middleware;
+let c=require("./middleware/cache.js")
 // Controllers
 const adderController = require('./controller/adder');
 const deleteController = require('./controller/delete');
 const updateController = require('./controller/update');
 const fetchController = require('./controller/fetch');
-
-// Route for Getting Videos
-routes.get('/video', (req, res) => {
-  console.log('hit video')
-  fetchController.getVideo()
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting Videos by Author
-routes.get('/singlevideo/:email', (req, res) => {
-  console.log('hit videoooo', req.params.email)
-  fetchController.getAuthorVideo(req.params.email)
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Single Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
-// Route for Getting Videos by Author
-routes.get('/video/:id', (req, res) => {
-  console.log('hit videoooo', req.params.id)
-  fetchController.getSingleVideo(req.params.id)
-    .then((result) => res.status(200).json({
-      status: "success",
-      msg: "Single Video Fetch",
-      result: result
-    }))
-    .catch(err => res.status(200).json({
-      status: "error",
-      payload: err
-    }));
-})
-
 // Route for Getting All Approved Blogs
-routes.get('/approveblogs', (req, res) => {
+routes.get('/approveblogs',c.g,c.s, (req, res) => {
   fetchController.getApprovedCROBlogs(req.body)
     .then(result => res.status(200).json({
       status: "success",
@@ -64,9 +21,8 @@ routes.get('/approveblogs', (req, res) => {
       payload: err
     }));
 })
-
 // Route for Getting All Approved Blogs
-routes.get('/category/:cat', (req, res) => {
+routes.get('/category/:cat',c.g,c.s, (req, res) => {
   fetchController.getCategoryApprovedCROBlogs(req.params.cat)
     .then(result => res.status(200).json({
       status: "success",
@@ -78,9 +34,8 @@ routes.get('/category/:cat', (req, res) => {
       payload: err
     }));
 })
-
 // Route for Getting All Not Approved Blogs
-routes.get('/notblogs', (req, res) => {
+routes.get('/notblogs',c.g,c.s, (req, res) => {
   fetchController.getNotApprovedCROBlogs()
     .then(result => res.status(200).json({
       status: "success",
@@ -110,7 +65,7 @@ routes.get('/notapprovedblogsbycro/:id', (req, res) => {
 })
 
 // Route for Getting All Blogs
-routes.get('/allblogs', (req, res) => {
+routes.get('/allblogs',c.g,c.s, (req, res) => {
   fetchController.getAllCROBlogs(req.body)
     .then(result => res.status(200).json({
       status: "success",
@@ -124,7 +79,7 @@ routes.get('/allblogs', (req, res) => {
 })
 
 // Route for Getting a AllCROBlogs
-routes.get('/allblogs/:id', (req, res) => {
+routes.get('/allblogs/:id',c.g,c.s,(req, res) => {
   fetchController.getSingleAllCROBlogs(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -138,7 +93,7 @@ routes.get('/allblogs/:id', (req, res) => {
 })
 
 // Route for Getting a saved blogs by author
-routes.get('/crosavedblogs/:id', (req, res) => {
+routes.get('/crosavedblogs/:id',c.g,c.s, (req, res) => {
   console.log(req.params.id)
   fetchController.getCROSavedBlogs(req.params.id)
     .then(result => res.status(200).json({
@@ -182,7 +137,7 @@ routes.get('/singlenotappblog/:id', (req, res) => {
 })
 
 // Route for Getting Single ApprovedCROBlog
-routes.get('/singleappblog/:id', (req, res) => {
+routes.get('/singleappblog/:id',c.g,c.s, (req, res) => {
   console.log(req.params, 'dwdnwklnkw');
   fetchController.getSingleApprovedCROBlogs(req.params.id)
     .then(result => res.status(200).json({
@@ -228,7 +183,7 @@ routes.get('/authorunApprovedCROBlogs/:id', (req, res) => {
     }));
 })
 
-routes.get('/croallblogs/:id', (req, res) => {
+routes.get('/croallblogs/:id',c.g,c.s, (req, res) => {
   console.log(req.params, 'kksnkk')
   fetchController.getAllCROBlogsByCRO(req.params.id)
     .then(result => {
@@ -245,7 +200,7 @@ routes.get('/croallblogs/:id', (req, res) => {
 })
 /*<-------------------------------------------------######Blogs Routes End######--------------------------------------------------->*/
 // Route for Getting Details of Author Profile
-routes.get('/single-cro/:id', (req, res) => {
+routes.get('/single-cro/:id',c.g,c.s, (req, res) => {
   console.log(req.param.id,'iddd')
   fetchController.getSingleApprovedCRO(req.params.id)
     .then(result => {
@@ -262,7 +217,7 @@ routes.get('/single-cro/:id', (req, res) => {
 })
 
 // Route for Getting All Not Approved Authors
-routes.get('/pending-cro', (req, res) => {
+routes.get('/pending-cro',c.g,c.s,(req, res) => {
   fetchController.getNotApprovedCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -290,7 +245,7 @@ routes.get('/pending-cro/:id', (req, res) => {
 })
 
 // Route for Getting All Approved Authors
-routes.get('/approvedcro', (req, res) => {
+routes.get('/approvedcro',c.g,c.s, (req, res) => {
   fetchController.getApprovedCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -304,7 +259,7 @@ routes.get('/approvedcro', (req, res) => {
 })
 
 // Route for Getting Single Approved Author
-routes.get('/approvedcro/:id', (req, res) => {
+routes.get('/approvedcro/:id',c.g,c.s, (req, res) => {
   fetchController.getSingleApprovedCRO(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -318,7 +273,7 @@ routes.get('/approvedcro/:id', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/all-cro', (req, res) => {
+routes.get('/all-cro',c.g,c.s, (req, res) => {
   fetchController.getAllCRO()
     .then(result => res.status(200).json({
       status: "success",
@@ -332,7 +287,7 @@ routes.get('/all-cro', (req, res) => {
 })
 
 // Route for Getting All Authors
-routes.get('/all-cro/:id', (req, res) => {
+routes.get('/all-cro/:id',c.g,c.s, (req, res) => {
   fetchController.getSingleAllCRO(req.params.id)
     .then(result => res.status(200).json({
       status: "success",
@@ -346,7 +301,7 @@ routes.get('/all-cro/:id', (req, res) => {
 })
 
 // Route for Getting Most Liked Blogs
-routes.get('/mostlikedblogs', (req, res) => {
+routes.get('/mostlikedblogs',c.g,c.s, (req, res) => {
   fetchController.getMostLikedBlogs()
     .then(result => res.status(200).json({
       status: "success",
@@ -373,6 +328,5 @@ routes.get('/reset/:token', (req, res) => {
       })
     })
 })
-
 
 module.exports = routes;

@@ -1,51 +1,23 @@
 const app = require("./app");
 const debug = require("debug")("node-angular");
 const http = require("http");
-const normalizePort = val => {
-  var port = parseInt(val, 10);
-
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
-
-  if (port >= 0) {
-    // port number
-    return port;
-  }
-
-  return false;
-};
-
-const onError = error => {
-  if (error.syscall !== "listen") {
-    throw error;
-  }
-  const bind = typeof port === "string" ? "pipe " + port : "port " + port;
-  switch (error.code) {
-    case "EACCES":
-      console.error(bind + " requires elevated privileges");
-      process.exit(1);
-      break;
-    case "EADDRINUSE":
-      console.error(bind + " is already in use");
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
-};
-
-const onListening = () => {
-  const addr = server.address();
-  const bind = typeof port === "string" ? "pipe " + port : "port " + port;
-  debug("Listening on " + bind);
-};
-
-const port = normalizePort(process.env.PORT || "3000");
+const cluster = require('cluster');
+const numCPUs = require('os').cpus().length;
+const port = process.env.PORT || 3000;
+if(cluster.isMaster) {
+console.log(`Master ${process.pid} is running`);
+for (let i = 0; i < numCPUs; i++) {
+cluster.fork();
+}
+cluster.on('exit', (worker, code, signal) => {
+console.log(`worker ${worker.process.pid} died`);
+  });
+}
+else{
 app.set("port", port);
-
 const server = http.createServer(app);
-server.on("error", onError);
-server.on("listening", onListening);
 server.listen(port);
+console.log(`Worker ${process.pid} started`);
+}
+
+console.log("Listening on Port : "+port);
