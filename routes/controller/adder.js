@@ -103,7 +103,7 @@ class AdderOperationController {
             blogid: result._id,
           }
           updateController.addUnapproveIdToMainBlog(id);
-          AdminMailForBlog(value);
+          // AdminMailForBlog(value);
           resolve(result);
         })
         .catch(err => reject(err));
