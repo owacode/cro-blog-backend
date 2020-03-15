@@ -285,7 +285,7 @@ routes.post('/update-approveprofile-with-image', upload.single('imageurl'), asyn
       console.log(err);
     })
   req.body.imageurl = result.url;
-  updateController.updateAuthorApprovedProfile(req.body)
+  updateController.updateCROApprovedProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({
@@ -302,7 +302,7 @@ routes.post('/update-approveprofile-with-image', upload.single('imageurl'), asyn
 // Route for UnApproved Author Profile
 routes.post('/update-approveprofile', (req, res) => {
   console.log(req.body);
-  updateController.updateAuthorApprovedProfile(req.body)
+  updateController.updateCROApprovedProfile(req.body)
     .then(result => {
       // adderController.addAuthorToMain(result);
       res.status(200).json({

@@ -149,7 +149,7 @@ class UpdateController {
   }
 
   // Update Profile of cro
-  updatecroApprovedProfile(values) {
+  updateCROApprovedProfile(values) {
     console.log(values, 'cro iddddddd ###')
     return new Promise((resolve, reject) => {
       ApprovedCRO.findByIdAndUpdate({ _id: values.id }, {
