@@ -22,6 +22,7 @@ const author = mongoose.Schema({
   approved_blogs_added:[],
   unapproved_blogs_added:[],
   all_blogs_added:[],
+  approved_blogs_count:{type: Number, default: 0},
 })
 
 module.exports = mongoose.model('ApprovedCRO', author, 'ApprovedCROs')

@@ -147,6 +147,7 @@ class AdderOperationController {
           }
           console.log(id,'cro details0');
           this.addApprovedCROBlogToUser(id);
+          updateController.updateCROApprovedBlogCount(result.cro_id);
           resolve(result)
         })
         .catch(err => reject(err));

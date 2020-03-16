@@ -30,6 +30,16 @@ class UpdateController {
     })
   }
 
+    // Update Like on a Blog
+    updateCROApprovedBlogCount(id) {
+      console.log('hitfefe', id)
+        ApprovedCRO.update(
+          { _id: id },
+          { $inc: { 'approved_blogs_count': 1 } })
+          .then(response => { console.log('approved_blog_count Incremented blog'); })
+          .catch(err => console.log(err));
+    }
+
   // Updating a Blog
   updateBlog(value) {
     return new Promise((resolve, reject) => {

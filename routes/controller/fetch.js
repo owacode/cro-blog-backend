@@ -193,6 +193,19 @@ class FetchController {
     })
   }
 
+  getTopCRO(id) {
+    return new Promise((resolve, reject) => {
+      ApprovedCRO.find({}).sort({ "approved_blogs_count": -1 }).limit(3)
+        .then(result => {
+          return resolve(result);
+        })
+        .catch(err => {
+          return reject(err);
+        });
+    })
+  }
+
+
   getSingleApprovedCRO(id) {
     console.log(id, 'dwfcwe')
     return new Promise((resolve, reject) => {

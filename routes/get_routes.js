@@ -230,6 +230,20 @@ routes.get('/pending-cro',c.g,c.s,(req, res) => {
     }));
 })
 
+// Route for Top 3 Approved Authors
+routes.get('/top-cro', (req, res) => {
+  fetchController.getTopCRO()
+    .then(result => res.status(200).json({
+      status: "success",
+      msg: "Top 3 Approved CRO Fetch Successfully",
+      result: result
+    }))
+    .catch(err => res.status(200).json({
+      status: "error",
+      payload: err
+    }));
+})
+
 // Route for Getting Single Not Approved Author
 routes.get('/pending-cro/:id', (req, res) => {
   fetchController.getSingleNotApprovedCRO(req.params.id)
