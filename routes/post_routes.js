@@ -374,21 +374,6 @@ routes.post('/login', async (req, res) => {
     }));
 })
 
-// This is to Verify the Email
-
-routes.get('/activate/:token', (req, res) => {
-  adderController.verifyMail(req.params)
-    .then(result => {
-      res.status(200).redirect('http://onewater.herokuapp.com/thankyou-author');
-    })
-    .catch(err => {
-      res.status(400).json({
-        status: 'error',
-        error: err
-      })
-    })
-})
-
 routes.post('/reset-password', (req, res) => {
   console.log(req.body);
   updateController.recoverPassword(req.body.email)

@@ -343,4 +343,17 @@ routes.get('/reset/:token', (req, res) => {
     })
 })
 
+// This is to Verify the Email
+routes.get('/activate/:token', (req, res) => {
+  adderController.verifyMail(req.params)
+    .then(result => {
+      res.status(200).redirect('https://onewater.herokuapp.com/thankyou-cro');
+    })
+    .catch(err => {
+      res.status(400).json({
+        status: 'error',
+        error: err
+      })
+    })
+})
 module.exports = routes;
